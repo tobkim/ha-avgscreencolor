@@ -15,7 +15,7 @@ $centerY = $screenHeight / 2
 function GetPixelWeight($x, $y) {
     # Calculate the distance from the pixel to the center of the screen
     $distance = [Math]::Sqrt(($x - $centerX) * ($x - $centerX) + ($y - $centerY) * ($y - $centerY))
-    
+
     # Map the distance to a weight between 0 and 1 using a Gaussian distribution
     $weight = [Math]::Exp(-($distance * $distance) / ($centerX * $centerY) / 10)
 
