@@ -1,0 +1,191 @@
+[
+    {
+        "id": "88fc97dca7a02a8d",
+        "type": "server-state-changed",
+        "z": "6dd9ec2ddf443daa",
+        "name": "",
+        "server": "",
+        "version": 4,
+        "exposeToHomeAssistant": false,
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "tob_report_state_changed"
+            },
+            {
+                "property": "icon",
+                "value": "mdi:alarm"
+            }
+        ],
+        "entityidfilter": "sensor.avgscreencolor",
+        "entityidfiltertype": "substring",
+        "outputinitially": false,
+        "state_type": "str",
+        "haltifstate": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "outputs": 1,
+        "output_only_on_state_change": true,
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "ignorePrevStateNull": false,
+        "ignorePrevStateUnknown": false,
+        "ignorePrevStateUnavailable": false,
+        "ignoreCurrentStateUnknown": false,
+        "ignoreCurrentStateUnavailable": false,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "eventData"
+            },
+            {
+                "property": "topic",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "triggerId"
+            }
+        ],
+        "x": 190,
+        "y": 1140,
+        "wires": [
+            [
+                "9cac090984e16ceb"
+            ]
+        ]
+    },
+    {
+        "id": "40be57293ede35d3",
+        "type": "api-call-service",
+        "z": "6dd9ec2ddf443daa",
+        "name": "",
+        "server": "",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "light",
+        "service": "turn_on",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "light.rechenzentrum_farblampe"
+        ],
+        "data": "{\"rgb_color\":msg.payload, \"transition\":2}",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 1530,
+        "y": 1140,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3bc0b6a9aae4648c",
+        "type": "function",
+        "z": "6dd9ec2ddf443daa",
+        "name": "msg.payload.split(\",\")",
+        "func": "msg.payload = msg.payload.split(\",\");\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 780,
+        "y": 1140,
+        "wires": [
+            [
+                "f1685ef879901942"
+            ]
+        ]
+    },
+    {
+        "id": "9cac090984e16ceb",
+        "type": "delay",
+        "z": "6dd9ec2ddf443daa",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "10",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": true,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 540,
+        "y": 1140,
+        "wires": [
+            [
+                "3bc0b6a9aae4648c"
+            ]
+        ]
+    },
+    {
+        "id": "f1685ef879901942",
+        "type": "api-current-state",
+        "z": "6dd9ec2ddf443daa",
+        "name": "",
+        "server": "33856661d5275855",
+        "version": 3,
+        "outputs": 2,
+        "halt_if": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "light.some_light_entity",
+        "state_type": "str",
+        "blockInputOverrides": false,
+        "outputProperties": [],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 1150,
+        "y": 1140,
+        "wires": [
+            [
+                "40be57293ede35d3"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "33856661d5275855",
+        "type": "server",
+        "name": "Home Assistant",
+        "version": 5,
+        "addon": false,
+        "rejectUnauthorizedCerts": false,
+        "ha_boolean": "y|yes|true|on|home|open",
+        "connectionDelay": true,
+        "cacheJson": true,
+        "heartbeat": true,
+        "heartbeatInterval": "30",
+        "areaSelector": "id",
+        "deviceSelector": "id",
+        "entitySelector": "id",
+        "statusSeparator": "at: ",
+        "statusYear": "hidden",
+        "statusMonth": "short",
+        "statusDay": "numeric",
+        "statusHourCycle": "h23",
+        "statusTimeFormat": "h:m",
+        "enableGlobalContextStore": false
+    }
+]
