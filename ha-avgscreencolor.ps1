@@ -1,3 +1,5 @@
+$STEPSIZE=25 # take every 25th pixel into account
+
 Add-Type -AssemblyName System.Drawing
 Add-Type -AssemblyName System.Windows.Forms
 
@@ -7,7 +9,7 @@ $screenHeight = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds.Height
 
 # Calculate the coordinates of the center of the screen
 $centerX = $screenWidth / 2
-$centerY = 350 # $screenHeight / 2
+$centerY = $screenHeight / 2
 
 # Define the weight function
 function GetPixelWeight($x, $y) {
@@ -31,20 +33,15 @@ $blackThreshold = 0.1
 $whiteThreshold = 0.8
 
 # Loop through each pixel in the screenshot and calculate the average color
-$STEP=25
 $totalRed = 0
 $totalGreen = 0
 $totalBlue = 0
 $totalPixels = 0
 $totalWeight = 0
-$skippedPixels = 0
-$totalPixels = 0
-for ($x = 50; $x -lt $bmp.Width - 100; $x+=$STEP) {
-    for ($y = 20; $y -lt $bmp.Height - 350; $y+=$STEP) {
+
+for ($x = 50; $x -lt $bmp.Width - 100; $x+=$STEPSIZE) { # take every 25th pixel into account
+    for ($y = 20; $y -lt $bmp.Height - 350; $y+=$STEPSIZE) { # take every 25th pixel into account
         $pixelColor = $bmp.GetPixel($x, $y)
-		$totalPixels++
-		
-        $brightness = $pixelColor.GetBrightness()
         
         # Skip pixels that are black, white, or grey
         if ($brightness -le $blackThreshold -or $brightness -ge $whiteThreshold) {
