@@ -18,10 +18,9 @@ function GetPixelWeight($x, $y) {
     
     # Map the distance to a weight between 0 and 1 using a Gaussian distribution
     $weight = [Math]::Exp(-($distance * $distance) / ($centerX * $centerY) / 10)
-    
+
     return $weight
 }
-
 
 # Capture a screenshot of the entire screen
 $bmp = New-Object System.Drawing.Bitmap($screenWidth, $screenHeight)
@@ -36,19 +35,18 @@ $whiteThreshold = 0.8
 $totalRed = 0
 $totalGreen = 0
 $totalBlue = 0
-$totalPixels = 0
 $totalWeight = 0
 
 for ($x = 50; $x -lt $bmp.Width - 100; $x+=$STEPSIZE) { # take every 25th pixel into account
     for ($y = 20; $y -lt $bmp.Height - 350; $y+=$STEPSIZE) { # take every 25th pixel into account
         $pixelColor = $bmp.GetPixel($x, $y)
-        
+
         # Skip pixels that are black, white, or grey
         if ($brightness -le $blackThreshold -or $brightness -ge $whiteThreshold) {
 			$skippedPixels++
             continue
         }
-		
+
         $weight = GetPixelWeight $x $y
         $totalRed += $weight * $pixelColor.R
         $totalGreen += $weight * $pixelColor.G
