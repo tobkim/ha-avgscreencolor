@@ -37,17 +37,21 @@ $totalGreen = 0
 $totalBlue = 0
 $totalWeight = 0
 
-for ($x = 50; $x -lt $bmp.Width - 100; $x+=$STEPSIZE) { # take every 25th pixel into account
-    for ($y = 20; $y -lt $bmp.Height - 350; $y+=$STEPSIZE) { # take every 25th pixel into account
+for ($x = 50; $x -lt $bmp.Width - 100; $x+=$STEPSIZE) { 
+    for ($y = 20; $y -lt $bmp.Height - 350; $y+=$STEPSIZE) { 
         $pixelColor = $bmp.GetPixel($x, $y)
+		$brightness = $pixelColor.GetBrightness()
+		
+		# Write-Output "$pixelColor .... $brightness" 
 
         # Skip pixels that are black, white, or grey
         if ($brightness -le $blackThreshold -or $brightness -ge $whiteThreshold) {
 			$skippedPixels++
             continue
         }
-
+		
         $weight = GetPixelWeight $x $y
+		
         $totalRed += $weight * $pixelColor.R
         $totalGreen += $weight * $pixelColor.G
         $totalBlue += $weight * $pixelColor.B
@@ -55,9 +59,17 @@ for ($x = 50; $x -lt $bmp.Width - 100; $x+=$STEPSIZE) { # take every 25th pixel 
     }
 }
 
-$averageRed = [Math]::Round($totalRed / $totalWeight)
-$averageGreen = [Math]::Round($totalGreen / $totalWeight)
-$averageBlue = [Math]::Round($totalBlue / $totalWeight)
+if ($totalWeight -gt 0) {
+	$averageRed = [Math]::Round($totalRed / $totalWeight)
+	$averageGreen = [Math]::Round($totalGreen / $totalWeight)
+	$averageBlue = [Math]::Round($totalBlue / $totalWeight)
+} else {
+	# No colored pixels found, just output white
+	$averageRed = 200
+	$averageGreen = 200
+	$averageBlue = 200
+}
 
 # Output the average color as an RGB value, comma separated.
 Write-Output "$averageRed,$averageGreen,$averageBlue"
+#Read-Host "test"
